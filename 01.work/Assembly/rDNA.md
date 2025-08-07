@@ -1,14 +1,3 @@
-注意还要加上yah和hic中的使用
-写上一些可能有用的工具但是还没有使用
-
-
-QuarTeT ，TRFill，ScatTR
-Snapbam igvsnap(?没有记录全名)
-ScatTR 估计不太长的串联重复的拷贝数
-
-着丝粒注释的工具
-GAVISUNK 利用特异性kmer比对到基因组的工具
-
 It's totally a draft.
 
 align seq
