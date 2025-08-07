@@ -1,3 +1,4 @@
+Some scripts come from [comery (Chentao Yang)](https://github.com/comery)
 ```bash
 # asm.fa: 有gaps的chromosomes
 # material.fa: 其他版本中可以和asm.fa比对上的contig + backbone中没有用在组装中的contig
@@ -25,7 +26,7 @@ tgsgapcloser --minmap_arg ' -x asm5'\
 # TGSgapcloser: ues reads
 # 非常耗内存，所以最好只提出来gap附近的reads和比对到组装上质量低的reads
 # 3G的reads用了250g内存，供参考
-~/miniconda3/bin/tgsgapcloser --min_idy 0.9\
+tgsgapcloser --min_idy 0.9\
         --scaff  asm.fa \
         --reads  ont_reads.fa \
         --output tgs_out \
@@ -38,11 +39,11 @@ tgsgapcloser --minmap_arg ' -x asm5'\
 
 grep reads
 ```bash
-perl ~/script/gaps /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/02.polish/01.polish/np2_r2/sv_polished.np_2nd.fasta > ./get_reads/gaps.bed
-awk 'BEGIN{OFS="\t"}{print $1,$2-10000,$3+10000}' ./get_reads/gaps.bed > ./get_reads/gaps_broaden.bed
-samtools view -@48 -L ./get_reads/gaps_broaden.bed /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/02.polish/02.assess/gci/ont.sort.bam |cut -f1 > ./get_reads/gap_ont.id
-seqkit grep -j 48 -f <(cat ./get_reads/simplex_ont_unMap_lowMAPQ.id ./get_reads/v1.0_ont_unMap_lowMAPQ.id ./get_reads/gap_ont.id|sort |uniq) /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/00.dataset/fq2fa/ONT_10k.fa > ./get_reads/ont_reads.fa
-seqkit grep -j 48 -f <(echo "chr24\nchr33\nchr8a\nchr8b\nchrY") /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/02.polish/01.polish/np2_r2/sv_polished.np_2nd.fasta > query.fa
+perl /path/gaps /path/sv_polished.np_2nd.fasta > /path/gaps.bed
+awk 'BEGIN{OFS="\t"}{print $1,$2-10000,$3+10000}' /path/gaps.bed > /path/gaps_broaden.bed
+samtools view -@48 -L ./path/gaps_broaden.bed /path/ont.sort.bam |cut -f1 > /path/gap_ont.id
+seqkit grep -j 48 -f <(cat /path/simplex_ont_unMap_lowMAPQ.id /path/v1.0_ont_unMap_lowMAPQ.id /path/gap_ont.id|sort |uniq) /path/ONT_10k.fa > /path/ont_reads.fa
+seqkit grep -j 48 -f <(echo "chr24\nchr33\nchr8a\nchr8b\nchrY") /path/sv_polished.np_2nd.fasta > query.fa
 samtools faidx -@48 query.fa
 ```
 
@@ -59,7 +60,7 @@ chmod +x process_bam.sh
 parallel -j 4 ./process_bam.sh ::: bam/*.bam
 rm process_bam.sh
 
-for f in /share/home/zhanglab/user/yangchentao/projects/panda/Carnivora/polar_bear/00.dataset/Fastq/nanopore/ONT_50k.fastq.gz /share/home/zhanglab/user/yangchentao/projects/panda/Carnivora/polar_bear/00.dataset/Fastq/nanopore/added.ONT_50k.fastq.gz;do
+for f in /path/ONT_50k.fastq.gz /path/added.ONT_50k.fastq.gz;do
         pigz -dc $f|awk 'NR % 4 == 1 {print $1}' |sed 's/^@//' >> temp/ont_50k.id
 done
 
@@ -67,7 +68,7 @@ mv v1.0_ont_unMap_lowMAPQ.id temp/v1.0_ont_all_unMap_lowMAPQ.id
 comm -12 <(sort temp/ont_50k.id) <(sort temp/v1.0_ont_all_unMap_lowMAPQ.id) > v1.0_ont_unMap_lowMAPQ.id
 
 # get MissTeloTail
-p=/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/02.gapfill/03.hic_scaf/02.get_seq/03.250714_2
+p=/path/
 join -1 1 -2 2 <(sort -k1 ${p}/genomeTelo.teloMiss.txt|grep chr) <(sort -k2 ${p}/rename.txt) |awk 'BEGIN{FS=" "}{print $3,$2}' > genomeTelo_newname.teloMiss.txt
 grep -f <(cut -f1 -d' ' genomeTelo_newname.teloMiss.txt) ${p}/manual.agp > teloMiss.agp
 join -1 1 -2 1 <(sort -k1 teloMiss.agp) <(sort -k1 genomeTelo_newname.teloMiss.txt) |cut -f6,10 -d' '|sort -k1V > origName_teloMiss.txt
@@ -76,12 +77,12 @@ join -1 1 -2 1 <(sort -k1,1 origName_teloMiss.txt) <(sort -k1,1 ${p}/comp.fa.fai
 
 # get no_telomere_tail
 threads=48
-regions_file="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/02.gapfill/04.telo_extend/readsTake/missTelo.region_2"
-#hifi="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/00.dataset/03.10k_acc/hifi_merge.fa.gz"
-ont_fq="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/00.dataset/03.10k_acc/merge.ONT_10k.fastq.gz"
-ont_fa="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/00.dataset/fq2fa/ONT_10k.fa"
-v1_ont_bam="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/02.gapfill/04.telo_extend/readsTake/v1.0_ont_10k.bam"
-simplex_ont_bam="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/02.gapfill/04.telo_extend/readsTake/bam/simplex_ont_10k.bam"
+regions_file="/path/missTelo.region_2"
+hifi="/path/hifi_merge.fa.gz"
+ont_fq="/path/merge.ONT_10k.fastq.gz"
+ont_fa="/path/ONT_10k.fa"
+v1_ont_bam="/path/v1.0_ont_10k.bam"
+simplex_ont_bam="/path/simplex_ont_10k.bam"
 
 while IFS= read -r region; do
         chrom=$(echo "$region" | cut -d':' -f1)

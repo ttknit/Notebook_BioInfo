@@ -46,11 +46,11 @@ use all kmers: kmc
 ```bash
 :<<reads
 declare -A seq
-seq[ngs]="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/02.polish/00.dateset/yak/BJX-xin_dna.clean.fastq"
-seq[hifi]="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/00.dataset/03.10k_acc/hifi_merge.fa"
+seq[ngs]="/path/dna.clean.fastq"
+seq[hifi]="/path/hifi_merge.fa"
 
 for s in "${!seq[@]}"; do
-        cd /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/rDNA_CopyNum/kmc/DB
+        cd /path/kmc/DB
         p_seq="${seq[$s]}"
         [ -d ${s}   ] || mkdir ${s}
         cd ${s}
@@ -72,9 +72,9 @@ kmc_dump -ci2 -cx100000  kmcDB_${s}_k${n} kmcDB_${s}_k${n}_freq.txt" >> ${s}_k${
 done
 reads
 
-rdna_path="/share/home/zhanglab/user/qiulingxin/script/source/rDNA_copy_estimation/bin"
-rdna_fa="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/rDNA/rDNA_unit.fa"
-ctrl_fa="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/02.polish/02.assess/BUSCO/Spectrin_repeat.fa"
+rdna_path="/path/rDNA_copy_estimation/bin"
+rdna_fa="/path/rDNA_unit.fa"
+ctrl_fa="/path/Spectrin_repeat.fa"
 for n in 21 31 51 71;do
         echo '#!/bin/bash
 #SBATCH --job-name=rdna
@@ -84,7 +84,7 @@ for n in 21 31 51 71;do
 #SBATCH --partition=cpu64,cpu128
 #SBATCH --mem=36g' > rdna_k${n}.sh
         cat << EOF_SCRIPT >> rdna_k${n}.sh
-source /share/home/zhanglab/user/yangchentao/miniconda3/bin/activate base
+source ~/miniconda3/bin/activate base
 # rDNA
 python3 ${rdna_path}/generateKmer.py ${rdna_fa} ${n} > ./rDNA/rdnaRef_k${n}.txt
 python3 ${rdna_path}/extractKmerFreqFromDb.py ./ngs/kmcDB_ngs_k${n}_freq.txt ./rDNA/rdnaRef_k${n}.txt > ./rDNA/rdna_k${n}_ngs.txt
@@ -103,7 +103,7 @@ EOF_SCRIPT
 #SBATCH --partition=cpu64,cpu128
 #SBATCH --mem=36g' > ctrl_k${n}.sh
         cat << EOF_SCRIPT_2 >> ctrl_k${n}.sh
-source /share/home/zhanglab/user/yangchentao/miniconda3/bin/activate base
+source ~/miniconda3/bin/activate base
 # control
 python3 ${rdna_path}/generateKmer.py ${ctrl_fa} ${n} > ./rDNA/ctrlRef_k${n}.txt
 python3 ${rdna_path}/extractKmerFreqFromDb.py ./ngs/kmcDB_ngs_k${n}_freq.txt ./rDNA/ctrlRef_k${n}.txt > ./rDNA/ctrl_k${n}_ngs.txt
@@ -118,9 +118,9 @@ done
 ```
 
 ```bash
-rdna_path="/share/home/zhanglab/user/qiulingxin/script/source/rDNA_copy_estimation/bin"
-rdna_fa="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/rDNA/rDNA_unit.fa"
-ctrl_fa="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/02.polish/02.assess/BUSCO/Spectrin_repeat.fa"
+rdna_path="/path/rDNA_copy_estimation/bin"
+rdna_fa="/path/rDNA_unit.fa"
+ctrl_fa="/path/Spectrin_repeat.fa"
 for n in 21 31 51 71;do
         for seq in rdna ctrl;do
                 echo '#!/bin/bash
@@ -131,7 +131,7 @@ for n in 21 31 51 71;do
 #SBATCH --partition=cpu64,cpu128
 #SBATCH --mem=36g' > ${seq}_k${n}_draw.sh
                 cat << EOF_SCRIPT >> ${seq}_k${n}_draw.sh
-source /share/home/zhanglab/user/yangchentao/miniconda3/bin/activate base
+source ~/miniconda3/bin/activate base
 a=$(sort -k3,3nr ./rDNA/${seq}_k${n}_ngs.txt|cut -f3|uniq -c|sort -k1,1nr|awk 'NR==3{print $2*1.5}')
 python3 ${rdna_path}/estimate_rDNA_copy.py  <(awk -v aa=\$a '\$3<aa' ./rDNA/${seq}_k${n}_ngs.txt) ./result_2/${seq}_k${n}_ngs.pdf 126
 a=$(sort -k3,3nr ./rDNA/${seq}_k${n}_hifi.txt|cut -f3|uniq -c|sort -k1,1nr|awk 'NR==3{print $2*1.5}')
@@ -142,15 +142,15 @@ EOF_SCRIPT
 done
 
 # NEB
-kmc -k31 -t48 -m36 -ci1 -cs100000 -fm /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/rDNA/kmer/data/NEB.fasta kmcDB_NEB masked_tmp
+kmc -k31 -t48 -m36 -ci1 -cs100000 -fm /path/NEB.fasta kmcDB_NEB masked_tmp
 kmc_tools transform kmcDB_masked histogram kmcDB_NEB.histo -cx100000
 kmc_dump -ci2 -cx100000  kmcDB_NEB kmcDB_NEB_freq.txt
-rdna_path="/share/home/zhanglab/user/qiulingxin/script/source/rDNA_copy_estimation/bin"
-python3 ${rdna_path}/generateKmer.py /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/rDNA/kmer/data/NEB.fasta 31 > ./k31_draw/NEB/NEB_k31.txt
+rdna_path="/path/rDNA_copy_estimation/bin"
+python3 ${rdna_path}/generateKmer.py /path/NEB.fasta 31 > ./k31_draw/NEB/NEB_k31.txt
 python3 ${rdna_path}/extractKmerFreqFromDb.py ./ngs/kmcDB_ngs_k31_freq.txt ./k31_draw/NEB/NEB_k31.txt > ./k31_draw/NEB/NEB_k31_ngs.txt
 python3 ${rdna_path}/extractKmerFreqFromDb.py ./hifi/kmcDB_hifi_k31_freq.txt ./k31_draw/NEB/NEB_k31.txt > ./k31_draw/NEB/NEB_k31_hifi.txt
 mm=3
-cd /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/rDNA/kmer/kmc/k31_draw
+cd /path/kmc/k31_draw
 a=$(sort -k3,3nr ./NEB/NEB_k31_ngs.txt|cut -f3|uniq -c|sort -k1,1nr|awk -v mm=$m 'NR==3{print $2*mm}')
 python3 estimate_rdna.py  <(awk -v aa=$a '$3<aa' ./NEB/NEB_k31_ngs.txt) ./NEB_k31_ngs.pdf 126 5
 a=$(sort -k3,3nr ./NEB/NEB_k31_hifi.txt|cut -f3|uniq -c|sort -k1,1nr|awk -v mm=$m 'NR==3{print $2*mm}')
@@ -158,12 +158,12 @@ python3 estimate_rdna.py  <(awk -v aa=$a '$3<aa' ./NEB/NEB_k31_hifi.txt) ./NEB_k
 ```
 
 ```bash
-rdna_path="/share/home/zhanglab/user/qiulingxin/script/source/rDNA_copy_estimation/bin"
-rdna_fa="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/rDNA/rDNA_unit.fa"
-ctrl_fa="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/02.polish/02.assess/BUSCO/Spectrin_repeat.fa"
+rdna_path="/path/rDNA_copy_estimation/bin"
+rdna_fa="/path/rDNA_unit.fa"
+ctrl_fa="/path/Spectrin_repeat.fa"
 n=31
 m=3
-source /share/home/zhanglab/user/yangchentao/miniconda3/bin/activate base
+source ~/miniconda3/bin/activate base
 
 a=$(sort -k3,3nr ../rDNA/ctrl_k${n}_ngs.txt|cut -f3|uniq -c|sort -k1,1nr|awk -v mm=$m 'NR==3{print $2*mm}')
 python3 estimate_rdna.py  <(awk -v aa=$a '$3<aa' ../rDNA/ctrl_k${n}_ngs.txt) ./ctrl_k${n}_ngs.pdf 126 5
@@ -182,10 +182,10 @@ use all kmers: kat
 ```bash
 declare -A region
 declare -A seq
-seq[ngs]="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/02.polish/00.dateset/yak/BJX-xin_dna.clean.fastq"
-seq[hifi]="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/00.dataset/03.10k_acc/hifi_merge.fa"
-region[rDNA]="/share/home/zhanglab/user/yangchentao/projects/panda/Carnivora/polar_bear/01.assembly/hifiasm_simplex/rDNA/one_copy.polarBear.rDNA.fa"
-region[NEB]="/share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/rDNA_CopyNum/data/NEB.fasta"
+seq[ngs]="/path/dna.clean.fastq"
+seq[hifi]="/path/hifi_merge.fa"
+region[rDNA]="/path/one_copy.polarBear.rDNA.fa"
+region[NEB]="/path/NEB.fasta"
 
 for s in "${!seq[@]}"; do
         for r in "${!region[@]}"; do
@@ -198,7 +198,7 @@ for s in "${!seq[@]}"; do
 #SBATCH --cpus-per-task=48
 #SBATCH --partition=cpu64,cpu128
 #SBATCH --mem=150g
-source /share/home/zhanglab/user/qiulingxin/miniconda3/bin/activate kat' > ${r}_${s}_sect.sh
+source ~/miniconda3/bin/activate kat' > ${r}_${s}_sect.sh
                 echo "kat sect -o ${r}_${s}_sect -t 48 -m 21 ${p_region} ${p_seq}
 kat plot profile ${r}_${s}_sect-counts.cvg -o ${r}_${s}_sect-counts.png" >> ${r}_${s}_sect.sh
                 #sbatch ${r}_${s}_sect.sh
@@ -218,13 +218,13 @@ bedtools maskfasta -fi pb.fa -bed rDNA_filtered.bed -fo pb_masked.fa
 
 # get masked kmer
 [ -d masked_tmp    ] || mkdir masked_tmp
-kmc -k31 -t48 -m36 -ci1 -cs100000 -fm /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/rDNA/find_rDNA/pb_masked.fa kmcDB_masked masked_tmp
+kmc -k31 -t48 -m36 -ci1 -cs100000 -fm /path/find_rDNA/pb_masked.fa kmcDB_masked masked_tmp
 kmc_tools transform kmcDB_masked histogram kmcDB_masked.histo -cx100000
 kmc_dump -ci2 -cx100000  kmcDB_masked kmcDB_masked_freq.txt
 rm -r masked_tmp
 # get rDNA kmer
 [ -d masked_tmp    ] || mkdir masked_tmp
-kmc -k31 -t48 -m36 -ci1 -cs100000 -fm /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/01.assembly/rDNA/rDNA_unit.fa kmcDB_rDNA masked_tmp
+kmc -k31 -t48 -m36 -ci1 -cs100000 -fm /path/rDNA_unit.fa kmcDB_rDNA masked_tmp
 rm -r masked_tmp
 kmc_tools transform kmcDB_rDNA histogram kmcDB_rDNA.histo -cx100000
 kmc_dump -ci2 -cx100000  kmcDB_rDNA kmcDB_rDNA_freq.txt
@@ -249,7 +249,7 @@ get rDNA consensus
 ```bash
 # msa
 cut -f2,12-13  blastn_filtered.tab | awk -v OFS='\t' '{ if ($2<=$3) print $1,$2,$3; else print $1,$3,$2   }' > rDNA.bed
-samtools faidx -@48 /share/home/zhanglab/user/qiulingxin/projects/GP/01.polar/freeze/PolarBear.fa -r <(awk '{print $1":"$2"-"$3}' rDNA.bed) > rDNA.fa
+samtools faidx -@48 /path/genome.fa -r <(awk '{print $1":"$2"-"$3}' rDNA.bed) > rDNA.fa
 mafft --thread 64 --auto rDNA.fa > rDNA_msa.fa
 # consensus
 n=0.5 # 0.1-0.5 all the outputs are the same
