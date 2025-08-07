@@ -1,0 +1,249 @@
+{
+  "main": {
+    "id": "71efd209bcb2cf4d",
+    "type": "split",
+    "children": [
+      {
+        "id": "ca2ed263279bdb7d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ef4161c9af481846",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01.work/Assembly/rDNA.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "rDNA"
+            }
+          },
+          {
+            "id": "7b1470b2779d2a7c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01.work/Assembly/rDNA.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "rDNA"
+            }
+          },
+          {
+            "id": "01f688c4c72698da",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01.work/Assembly/Sundries.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Sundries"
+            }
+          },
+          {
+            "id": "33679753ffb6d4d1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01.work/Assembly/gapfilling.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "gapfilling"
+            }
+          },
+          {
+            "id": "82232c84332452bd",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01.work/Repeat/Repeat.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Repeat"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "d914e4cf7431fcbf",
+    "type": "split",
+    "children": [
+      {
+        "id": "ae29eeba7f1aabe4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b7ee6daaa3165364",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "574081853ed28207",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "54f2154339b97755",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "right": {
+    "id": "261b141ad97a894c",
+    "type": "split",
+    "children": [
+      {
+        "id": "7d4e2ff43d8ead18",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cecad541d6c3f4dd",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "01.work/Assembly/Assembly.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Assembly 的反向链接列表"
+            }
+          },
+          {
+            "id": "c73777a0b61e485d",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "01.work/Assembly/Assembly.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Assembly 的出链列表"
+            }
+          },
+          {
+            "id": "8481ce926fc58ba7",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "391c5c16b891f722",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "01.work/Assembly/Assembly.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Assembly 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "33679753ffb6d4d1",
+  "lastOpenFiles": [
+    "01.work/Assembly/rDNA.md",
+    "01.work/Assembly/Sundries.md",
+    "01.work/Repeat/Repeat.md",
+    "02.sundries/README.md",
+    "README.md",
+    "02.sundries/bin/workflow.txt",
+    "02.sundries/bin/job_wrapper.sh",
+    "02.sundries/bin/auto_submit_wrapped.sh",
+    "02.sundries/bin/auto_submit.sh",
+    "01.work/Assembly/bin/AssignPlot1asmLinkview.sh",
+    "01.work/Assembly/bin/MakeLinkViewKaryotypeFromPaf.py",
+    "01.work/Assembly/gapfilling.md",
+    "01.work/Assembly/bin/cluster_by_similarity.py",
+    "01.work/Assembly/bin/alignmentStatFromPaf_avamap.py",
+    "01.work/Assembly/bin/extract_info.py",
+    "01.work/Assembly/bin/estimate_rdna.py",
+    "01.work/Assembly/output_example/combined_boxplot.png"
+  ]
+}

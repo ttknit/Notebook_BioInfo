@@ -1,0 +1,11 @@
+#./mapping/hifi_*.sh ./mapping/ont_*.sh
+./mapping/merge_hifi.sh ./mapping/merge_ont.sh
+./sv/svPolish.sh
+./np_r1/hifi_*.sh
+./np_r1/merge_hifi.sh
+./np_r1/nextPolish.sh
+./np_r2/hifi_*.sh
+./np_r2/merge_hifi.sh
+./np_r2/nextPolish.sh
+./r2_mapping/hifi_*.sh ./r2_mapping/ont_*.sh
+./r2_mapping/merge_hifi.sh ./r2_mapping/merge_ont.sh
